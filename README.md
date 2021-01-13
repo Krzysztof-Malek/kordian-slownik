@@ -1,1 +1,1 @@
-# kordian-slownik
+# Projekt-Kordian-s-ownik
