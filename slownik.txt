@@ -1,12 +1,12 @@
 absynt
 ara
 arbuz
-ynt
 jak
 kajak
 kot
 kotara
 okno
+okn
 potok
 slonko
 tok
