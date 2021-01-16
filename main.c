@@ -6,24 +6,19 @@ Projekt PK2 - Gra w statki
 #include <stdio.h>
 #include <string.h>
 #include <conio.h>
-
-#ifdef _WIN32
-#include <Windows.h>
-#else
-#include <unistd.h>
-#endif
-
-#include "structs.h"
+#include <locale.h>
 
 int main() {
-	/*int n, i, naj;
-	printf("Podaj n: ");
-	scanf("%d", &n);
-
-	int* a = new int[n];*/
+	setlocale(LC_CTYPE, ".1250");
 
 	int m = 6;//ustalasz m i n (na razie tak, potem mo¿e bardziej interaktywnie)
 	int n = 3;
+
+	/*printf("Podaj m: ");
+	scanf("%d", &m);
+	printf("\n Podaj n: ");
+	scanf("%d", &n);
+	printf("\n");*/
 
 	int M = m + 1;	//tutaj ¿eby sobie trochê u³atwiæ zrobi³em zmienne o 1 wiêksze od m i n ¿eby nie pisaæ za ka¿dym razem m+1, n+1
 	int N = n + 1;
@@ -34,15 +29,21 @@ int main() {
 		exit(1);
 	}
 
-	char* slowo = malloc(1 * sizeof(char));	//zmienne slowo i koniec do zapisywania tymczasowych slów z alfabetu
-	char* koniec = malloc(1 * sizeof(char));
+	char* slowo = malloc(50 * sizeof(char));	//zmienne slowo i koniec do zapisywania tymczasowych slów z alfabetu
+	char* koniec = malloc(50 * sizeof(char));
 
 	//char koniec[] = "";
 
 	fpos_t pozycja = 0;	//zmienna do zapisanie pozycji pliku aby wróciæ do miejsca gdzie skoñczyliœmy (pobieranie kolejnego s³owa z kolejki)
 
 	while (fscanf(slownik, "%s", slowo)) {	//pobieranie kolejnego s³owa z kolejki s³ownika
-		if (feof(slownik) != 0) return 0;	//koñczenie programu jeœli doszliœmy do koñca pliku
+		if (feof(slownik) != 0) {//koñczenie programu jeœli doszliœmy do koñca pliku
+			fclose(slownik);
+			free(koniec);
+			free(slowo);
+
+			return 0;
+		}
 		//printf("%s \n", slowo); //tymczasowe wyœwietlanie
 
 		if (strlen(slowo) == m) {	//je¿eli s³owo mniejsze ni¿ m to nie bierzemy pod uwagê
@@ -54,8 +55,8 @@ int main() {
 				fscanf(slownik, "%s", koniec);	//pobranie kolejnej koñcówki do porównania ze s³owem
 				if (feof(slownik) != 0) break;	//sprawdzenia czy nie wyst¹pi³ koniec pliku (czy sprawdziliœmy wszystkie koñcówki)
 				if (strlen(koniec) == n) {
-					for (int i = n; i < M; i++) {
-						if (slowo[i] != koniec[i - n])break;	//sprawdzenie n ostatnich liter s³owa w koñcówce (czyli czy powinniœmy wykluczyæ s³owo i go nie wypisaæ)
+					for (int i = n; i >= 0; i--) {
+						if (slowo[m - i] != koniec[a])break;	//sprawdzenie n ostatnich liter s³owa w koñcówce (czyli czy powinniœmy wykluczyæ s³owo i go nie wypisaæ)
 						a++;	//je¿eli kolejne litery siê zgadzaj¹ to a++
 					}
 				}
@@ -89,11 +90,4 @@ int main() {
 			a = 0;//wyzerowanie zmiennej warunkowej
 		}
 	}
-
-	free(slowo);
-	free(koniec);
-
-	fclose(slownik);
-
-	return 0;
 }
